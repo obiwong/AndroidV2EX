@@ -38,8 +38,10 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -106,16 +108,26 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 	
 	
 
-    /** Handle "refresh" title-bar action. */
-    public void onRefreshClick(View v) {
-		Database.getInstance(this).delete(Database.TABLE_TOPICS, null, null);
-    	
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-        intent.putExtra(SyncService.EXTRA_STATUS_RECEIVER, mState.mReceiver);
-        intent.putExtra(SyncService.OPERATOR, SyncService.OPERATOR_FETCH_TOPIC_LIST);
-        intent.putExtra(SyncService.PATH, LATEST_TOPICS);
-        startService(intent);
-    }
+	/** Handle "refresh" title-bar action. */
+	public void onRefreshClick(View v) {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (cm != null && cm.getActiveNetworkInfo() != null) {
+			Database.getInstance(this).delete(Database.TABLE_TOPICS, null, null);
+
+			final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+			intent.putExtra(SyncService.EXTRA_STATUS_RECEIVER, mState.mReceiver);
+			intent.putExtra(SyncService.OPERATOR, SyncService.OPERATOR_FETCH_TOPIC_LIST);
+			intent.putExtra(SyncService.PATH, LATEST_TOPICS);
+			startService(intent);
+		} else {
+			final Toast toast = Toast.makeText(TopicListActivity.this.getApplicationContext(),
+					R.string.no_available_connection, Toast.LENGTH_SHORT);
+			ToastMaster.setToast(toast);
+			toast.show();
+		}
+
+	}
 
 	void setupTopicListAdapter() {
 		Cursor cur = Misc.getTopicsCursor( this );

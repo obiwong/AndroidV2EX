@@ -19,8 +19,10 @@ package com.htbest2000.v2ex.ui;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -83,13 +85,22 @@ public class AllNodesActivity extends RoboActivity implements DetachableResultRe
 	}
 
 	public void onRefreshClick(View v) {
-		Database.getInstance(this).delete(Database.TABLE_NODES, null, null);
-    	
-        final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
-        intent.putExtra(SyncService.EXTRA_STATUS_RECEIVER, mState.mReceiver);
-        intent.putExtra(SyncService.OPERATOR, SyncService.OPERATOR_FETCH_TOPIC_NODES);
-        intent.putExtra(SyncService.PATH, ALL_NODES);
-        startService(intent);
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if (cm != null && cm.getActiveNetworkInfo() != null) {
+			Database.getInstance(this).delete(Database.TABLE_NODES, null, null);
+	    	
+	        final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
+	        intent.putExtra(SyncService.EXTRA_STATUS_RECEIVER, mState.mReceiver);
+	        intent.putExtra(SyncService.OPERATOR, SyncService.OPERATOR_FETCH_TOPIC_NODES);
+	        intent.putExtra(SyncService.PATH, ALL_NODES);
+	        startService(intent);
+		} else {
+			final Toast toast = Toast.makeText(AllNodesActivity.this.getApplicationContext(),
+					R.string.no_available_connection, Toast.LENGTH_SHORT);
+			ToastMaster.setToast(toast);
+			toast.show();
+		}
 	}
 
 	@Override

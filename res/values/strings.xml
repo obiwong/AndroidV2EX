@@ -18,6 +18,7 @@
 <resources>
     <string name="app_name">Android V2EX</string>
     <string name="fetch_topic_list_error">Download topics failed, please try again</string>
+    <string name="no_available_connection">Please connect to Internet before sync</string>
     <string name="description_logo">V2EX</string>
     <string name="description_refresh">Refresh</string>
     <string name="description_search">Search</string>
