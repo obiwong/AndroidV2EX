@@ -71,75 +71,28 @@ public class Nodes {
 	public Visitor getVisitor() {
 		return mVisitor;
 	}
+
 	public void setVisitor(Visitor mVisitor) {
 		this.mVisitor = mVisitor;
 	}
 	// ---
 	
 	public void travel(InputStream in) throws IOException {
-		CreateNote tc = new CreateNote(null);
-
-		HashMap<String, Object> maps = new HashMap<String, Object>();
-		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-		reader.beginArray();
-		
-		while (true) {
-			JsonToken token = reader.peek();
-			if (JsonToken.END_ARRAY.equals(token))
-				break;
-			
-			maps.clear();
-			tc.proceed(reader, maps);
-			Node node = New.inflate(maps, Node.class);
-			mVisitor.visit(node);
-		}
-
-		reader.close();
-		in.close();
+		CreateNote tc = new CreateNote(in);
+		tc.unmarshalled();
 	}
-	
-	public static class CreateNote extends Unmarshalling<Node> {
 
+	public class CreateNote extends Unmarshalling.ObjectArray<Node> {
 		public CreateNote(InputStream in) {
-			super(in, null, null);
+			super(in, null, Node.class);
+			setNumberMap("id", Long.class);
+			setNumberMap("topics", Integer.class);
 		}
 
 		@Override
-		protected void proceed(JsonReader reader, HashMap<String, Object> maps)
-				throws IOException {
-			reader.beginObject();
-			
-			reader.nextName();
-			maps.put("id", reader.nextLong());
-			reader.nextName();
-			maps.put("name", reader.nextString());
-			reader.nextName();
-			maps.put("url", reader.nextString());
-			reader.nextName();
-			maps.put("title", reader.nextString());
-			reader.nextName();
-			maps.put("title_alternative", reader.nextString());
-			reader.nextName();
-			maps.put("topics", reader.nextInt());
-			reader.nextName();
-			if (JsonToken.NULL.equals(reader.peek())) {
-				maps.put("header", null);
-				reader.nextNull();
-			} else {
-				maps.put("header", reader.nextString());
-			}
-			reader.nextName();
-			if (JsonToken.NULL.equals(reader.peek())) {
-				maps.put("header", null);
-				reader.nextNull();
-			} else {
-				maps.put("footer", reader.nextString());
-			}
-			reader.nextName();
-			maps.put("created", reader.nextString());
-
-			reader.endObject();
+		public void createObject(Node obj) {
+			mVisitor.visit(obj);
 		}
-		
 	}
+
 }

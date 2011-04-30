@@ -21,35 +21,131 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import android.util.Log;
+
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 
 public abstract class Unmarshalling<T> {
-	private InputStream mIn;
-	private String mCoding;
-	private Class<T> mClazz;
+	protected final InputStream  mIn;
+	protected final String   mCoding;
+	protected final Class<T>  mClazz;
 
+	//------------------------------------------------
+
+	protected final HashMap<String, Class<?>> mNumberMap = new HashMap<String, Class<?>>();
+	
+	public void setNumberMap(String name, Class<?> value) {
+		mNumberMap.put(name, value);
+	}
+	
+	public void clearNumberMap() {
+		mNumberMap.clear();
+	}
+
+	//------------------------------------------------
+	
+	/*
+	 * Constructor
+	 */
 	public Unmarshalling(InputStream in, String coding, Class<T> clazz) {
 		mIn = in;
 		mClazz = clazz;
-		if (null == coding)
-			mCoding = "UTF-8";
-		else 
-			mCoding = coding;
+		mCoding = (null == coding) ? "UTF-8" : coding;
+	}
+	
+	//------------------------------------------------
+
+	public void collectData(JsonReader reader, HashMap<String, Object> dataMap)
+																		throws IOException {
+		String name;
+
+		reader.beginObject();
+		while (true) {
+			JsonToken token = reader.peek();
+			if (JsonToken.END_ARRAY.equals(token)) {
+				break;
+			}
+			if (JsonToken.END_OBJECT.equals(token)) {
+				reader.endObject();
+				break;
+			}
+			if (JsonToken.END_DOCUMENT.equals(token)) {
+				break;
+			}
+
+			name = reader.nextName();
+			JsonToken tok = reader.peek();
+
+			if (JsonToken.STRING.equals(tok)) {
+				dataMap.put(name, reader.nextString());
+			} else if (JsonToken.NULL.equals(tok)) {
+				dataMap.put(name, null);
+				reader.nextNull();
+			} else if (JsonToken.BOOLEAN.equals(tok)) {
+				dataMap.put(name, reader.nextBoolean());
+			} else if (JsonToken.NUMBER.equals(tok)) {
+				Class<?> clazz = mNumberMap.get(name);
+				if (null != clazz) {
+					if (Integer.class.equals(clazz)) {
+						dataMap.put(name, reader.nextInt());
+					} else if (Long.class.equals(clazz)) {
+						dataMap.put(name, reader.nextLong());
+					} else if (Double.class.equals(clazz)) {
+						dataMap.put(name, reader.nextDouble());
+					}
+				}
+			}
+		}
 	}
 
-	public T unmarshalling() throws IOException {
-		HashMap<String, Object> maps = new HashMap<String, Object>();
-		JsonReader reader = new JsonReader(new InputStreamReader(mIn, mCoding));
-		proceed( reader, maps );
-		reader.close();
-		mIn.close();
-		return New.inflate(maps, mClazz);
+	public abstract void unmarshalled() throws IOException;
+	public abstract void createObject(T obj);
+
+	//===================================================================
+	
+	public static abstract class SingleObject<T> extends Unmarshalling<T> {
+		public SingleObject(InputStream in, String coding, Class<T> clazz) {
+			super(in, coding, clazz);
+		}
+
+		@Override
+		public final void unmarshalled() throws IOException {
+			JsonReader reader = new JsonReader(new InputStreamReader(mIn, mCoding));
+			HashMap<String, Object> dataMap = new HashMap<String, Object>();
+			collectData( reader, dataMap );
+			createObject( New.inflate(dataMap, mClazz) );
+			reader.close();
+			mIn.close();
+		}
 	}
 	
-	public void unmarshallingArray() throws IOException {
-		
-	}
+	//--------------------------------------------------------------------
 	
-	protected abstract void proceed(JsonReader reader, HashMap<String, Object> maps)
-	 									throws IOException ;
+	public static abstract class ObjectArray<T> extends Unmarshalling<T> {
+		public ObjectArray(InputStream in, String coding, Class<T> clazz) {
+			super(in, coding, clazz);
+		}
+
+		@Override
+		public final void unmarshalled() throws IOException {
+			JsonReader reader = new JsonReader(new InputStreamReader(mIn, mCoding));
+			HashMap<String, Object> dataMap = new HashMap<String, Object>();
+			
+			reader.beginArray();
+			while (true) {
+				JsonToken token = reader.peek();
+				if (JsonToken.END_ARRAY.equals(token))
+					break;
+
+				dataMap.clear();
+				collectData(reader, dataMap);
+				
+				createObject( New.inflate(dataMap, mClazz) );
+			}
+			reader.close();
+			mIn.close();
+		}
+	}
+
 }

@@ -23,16 +23,24 @@ import java.util.HashMap;
 import android.util.Log;
 
 public class New {
+	public static final String TAG = "=AV2EX=New=";
+
+	/**
+	 * Inflate object from map
+	 * @param src the values
+	 * @param type the class class
+	 * @return object with fulfilled values
+	 */
 	public static <T> T inflate( HashMap<String, ?> src, Class<T> type ) {
         T ret;
         try {
             ret = type.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
-            Log.i("=ht=", "InstantiationException: " + e.toString());
+            Log.e(TAG, "InstantiationException: " + e.toString());
             return null;
         } catch (IllegalAccessException e) {
-        	Log.i("=ht=", "IllegalAccessException: " + e.toString());
+        	Log.e(TAG, "IllegalAccessException: " + e.toString());
             e.printStackTrace();
             return null;
         }
@@ -51,7 +59,7 @@ public class New {
             	}
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.i("=ht=", "set field failed: " + e.toString());
+                Log.i(TAG, "set field failed: " + e.toString());
                 return null;
             }
         }

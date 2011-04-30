@@ -18,12 +18,7 @@ package com.htbest2000.v2ex.api;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.htbest2000.reflect.New;
 import com.htbest2000.reflect.Unmarshalling;
 
 public class Topics {
@@ -64,58 +59,30 @@ public class Topics {
 	public Visitor getVisitor() {
 		return mVisitor;
 	}
-	public void setVisitor(Visitor mVisitor) {
-		this.mVisitor = mVisitor;
+
+	public void setVisitor(Visitor visitor) {
+		this.mVisitor = visitor;
 	}
 	// ---
 
 	public void travel(InputStream in) throws IOException {
-		CreateTopic tc = new CreateTopic(null);
-
-		HashMap<String, Object> maps = new HashMap<String, Object>();
-		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-		reader.beginArray();
-		
-		while (true) {
-			JsonToken token = reader.peek();
-			if (JsonToken.END_ARRAY.equals(token))
-				break;
-			
-			maps.clear();
-			tc.proceed(reader, maps);
-			Topic topic = New.inflate(maps, Topic.class);
-			mVisitor.visit(topic);
-		}
-
-		reader.close();
-		in.close();
+		CreateTopic tc = new CreateTopic(in);
+		tc.unmarshalled();
 	}
 
-	private static class CreateTopic extends Unmarshalling<Topic> {
+	private class CreateTopic extends Unmarshalling.ObjectArray<Topic> {
 
 		public CreateTopic(InputStream in) {
-			super(in, null, null);
+			super(in, null, Topic.class);
+			setNumberMap("id", Long.class);
+			setNumberMap("replies", Integer.class);
 		}
 
 		@Override
-		protected void proceed(JsonReader reader, HashMap<String, Object> maps)
-		throws IOException {
-			reader.beginObject();
-			
-			reader.nextName();
-			maps.put("id", reader.nextLong());
-			reader.nextName();
-			maps.put("title", reader.nextString());
-			reader.nextName();
-			maps.put("url", reader.nextString());
-			reader.nextName();
-			maps.put("content", reader.nextString());
-			reader.nextName();
-			maps.put("content_rendered", reader.nextString());
-			reader.nextName();
-			maps.put("replies", reader.nextInt());
-			
-			reader.endObject();
+		public void createObject(Topic obj) {
+			if (mVisitor != null) {
+				mVisitor.visit(obj);
+			}
 		}
 	}
 }

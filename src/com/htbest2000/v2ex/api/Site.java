@@ -18,13 +18,9 @@ package com.htbest2000.v2ex.api;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import android.util.Log;
-
 import com.google.gson.stream.JsonReader;
-import com.htbest2000.reflect.New;
 import com.htbest2000.reflect.Unmarshalling;
 
 public class Site {
@@ -34,18 +30,21 @@ public class Site {
 	public String domain;
 
 	public static Site create(InputStream in) throws IOException {
-		Creater cs = new Creater(in);
-		return cs.unmarshalling();
+		Creater cs = new Creater(in, null, Site.class);
+		cs.unmarshalled();
+		return cs.mSite;
 	}
 
-	private static class Creater extends Unmarshalling<Site> {
-		public Creater(InputStream in) {
-			super(in, null, Site.class);
+	private static class Creater extends Unmarshalling.SingleObject<Site> {
+		Site mSite;
+		
+		public Creater(InputStream in, String coding, Class<Site> clazz) {
+			super(in, coding, clazz);
 		}
 
 		@Override
-		protected void proceed(JsonReader reader, HashMap<String, Object> maps)
-																throws IOException {
+		public void collectData(JsonReader reader,
+				HashMap<String, Object> dataMap) throws IOException {
 			String name;
 			String val;
 
@@ -53,10 +52,13 @@ public class Site {
 			for (int i=0; i<4; i++) {
 				name = reader.nextName();
 				val  = reader.nextString();
-				maps.put(name, val);
+				dataMap.put(name, val);
 			}
 		}
 
-
+		@Override
+		public void createObject(Site obj) {
+			mSite = obj;
+		}
 	}
 }
