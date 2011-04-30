@@ -42,7 +42,7 @@ import roboguice.service.RoboIntentService;
  */
 public class SyncService extends RoboIntentService {
 	public static final boolean DEBUG = true;
-	public static final String TAG = "=ht= Android V2EX sync service";
+	public static final String TAG = "=AV2EX=SyncService=";
 	
     public static final String EXTRA_STATUS_RECEIVER =
         "com.htbest2000.v2ex.service.STATUS_RECEIVER";
@@ -104,16 +104,16 @@ public class SyncService extends RoboIntentService {
 
 	private void fetchTopicList(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_LIST) );
-		Log.i("=ht=", "start fetchTopicList");
+		if (DEBUG) Log.i(TAG, "start fetchTopicList");
 		mDownloader.fetchHtml( path );
-		Log.i("=ht=", "end fetchTopicList");
+		if (DEBUG) Log.i(TAG, "end fetchTopicList");
 	}
-	
+
 	private void fetchNodes(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_NODES) );
-		Log.i("=ht=", "start fetchNodes");
+		if (DEBUG) Log.i(TAG, "start fetchNodes");
 		mDownloader.fetchHtml(path);
-		Log.i("=ht=", "end fetchNodes");
+		if (DEBUG) Log.i(TAG, "end fetchNodes");
 	}
 
 	private Downloader.Command commandFactory(int command) {
@@ -140,7 +140,7 @@ public class SyncService extends RoboIntentService {
 				topics.setVisitor(new Topics.Visitor() {
 					@Override
 					public void visit(Topic topic) {
-						Log.i("=ht=", "visit a topic :" + topic.toString());
+						if (DEBUG) Log.i(TAG, "visit a topic :" + topic.toString());
 						final Database db = Database.getInstance(SyncService.this);
 						if (Misc.getTopicCount(SyncService.this, topic.id) < 1) {
 							final ContentValues cv = new ContentValues();
@@ -191,7 +191,7 @@ public class SyncService extends RoboIntentService {
 						cv.put(Database.Columns.Nodes.NAME_CREATED_TIME, node.created);
 
 						final Database db = Database.getInstance(SyncService.this);
-						Log.i("=ht=", "count: " + Misc.getNodeCount(SyncService.this, node.id));
+						if (DEBUG) Log.i(TAG, "count: " + Misc.getNodeCount(SyncService.this, node.id));
 						if (Misc.getNodeCount(SyncService.this, node.id) < 1) {
 							db.insert(Database.TABLE_NODES, cv);
 						} else {
