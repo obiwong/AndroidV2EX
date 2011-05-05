@@ -19,9 +19,8 @@ package com.htbest2000.reflect;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import android.util.Log;
 
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
@@ -38,7 +37,7 @@ public abstract class Unmarshalling<T> {
 	public void setNumberMap(String name, Class<?> value) {
 		mNumberMap.put(name, value);
 	}
-	
+
 	public void clearNumberMap() {
 		mNumberMap.clear();
 	}
@@ -58,7 +57,7 @@ public abstract class Unmarshalling<T> {
 
 	public void collectData(JsonReader reader, HashMap<String, Object> dataMap)
 																		throws IOException {
-		String name;
+		ArrayList<String> parents = new ArrayList<String>();
 
 		reader.beginObject();
 		while (true) {
@@ -68,13 +67,22 @@ public abstract class Unmarshalling<T> {
 			}
 			if (JsonToken.END_OBJECT.equals(token)) {
 				reader.endObject();
-				break;
+				if (parents.isEmpty()) {
+					break;
+				} else {
+					parents.remove(parents.size() - 1);
+					continue;
+				}
 			}
 			if (JsonToken.END_DOCUMENT.equals(token)) {
 				break;
 			}
 
-			name = reader.nextName();
+			String name = "";
+			for (String n : parents) {
+				name += n + "_";
+			}
+			name = name + reader.nextName();
 			JsonToken tok = reader.peek();
 
 			if (JsonToken.STRING.equals(tok)) {
@@ -95,6 +103,9 @@ public abstract class Unmarshalling<T> {
 						dataMap.put(name, reader.nextDouble());
 					}
 				}
+			} else if (JsonToken.BEGIN_OBJECT.equals(tok)) {
+				parents.add(name);
+				reader.beginObject();
 			}
 		}
 	}

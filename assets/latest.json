@@ -2,32 +2,71 @@
     
     
     {
-        "id" : 12345,
+        "id" : 1,
         "title" : "title 1",
         "url" : "url 1",
         "content" : "content 1",
-        "content_rendered" : "rend 1",
-        "replies" : 1
+        "content_rendered" : "content_rendered 1",
+        "replies" : 1,
+        "member" : {
+            "id" : 1,
+            "username" : "member username 1"
+        },
+        "node" : {
+            "id" : 1,
+            "name" : "node name 1",
+            "title" : "node title 1",
+            "title_alternative" : "node title_alternative 1",
+            "url" : "node url 1",
+            "topics" : 1
+        }
     }
     
     ,
+    
     {
-        "id" : 54321,
+        "id" : 2,
         "title" : "title 2",
         "url" : "url 2",
-        "content" : "",
-        "content_rendered" : "",
-        "replies" : 2
+        "content" : "content 2",
+        "content_rendered" : "content_rendered 2",
+        "replies" : 2,
+        "member" : {
+            "id" : 2,
+            "username" : "member username 2"
+        },
+        "node" : {
+            "id" : 2,
+            "name" : "node name 2",
+            "title" : "node title 2",
+            "title_alternative" : "node title_alternative 2",
+            "url" : "node url 2",
+            "topics" : 2
+        }
     }
     
     ,
+    
     {
-        "id" : 1111,
+        "id" : 3,
         "title" : "title 3",
         "url" : "url 3",
         "content" : "content 3",
-        "content_rendered" : "rend 3",
-        "replies" : 0
+        "content_rendered" : "content_rendered 3",
+        "replies" : 3,
+        "member" : {
+            "id" : 3,
+            "username" : "member username 3"
+        },
+        "node" : {
+            "id" : 3,
+            "name" : "node name 3",
+            "title" : "node title 3",
+            "title_alternative" : "node title_alternative 3",
+            "url" : "node url 3",
+            "topics" : 3
+        }
     }
-        
+
+    
 ]
