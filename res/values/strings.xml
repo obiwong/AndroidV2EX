@@ -37,7 +37,15 @@
 			content TEXT,
 			content_rendered TEXT,
 			replies INTEGER,
-			time INTEGER
+			time INTEGER,
+			member_id INTEGER,
+			member_username TEXT,
+			node_id INTEGER,
+			node_name TEXT,
+			node_title TEXT,
+			node_title_alternative TEXT,
+			node_url TEXT,
+			node_topics INTEGER
 			);</item>
 
 		<item>CREATE TABLE nodes (

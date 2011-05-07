@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.util.Log;
 
 public class Downloader {
+	public final String TAG = "=AV2EX=Downloader";
 	public final boolean DEBUG = true;
 	
 	public final static String SCHEME = "http";
@@ -65,19 +66,17 @@ public class Downloader {
 	}
 
 	public void fetchHtml(String path) throws IOException {
-		if (DEBUG) {
-			Log.i("=ht=", "will fetch: " + HOST_WITH_SCHEME + path);
-		}
+		if (DEBUG) Log.i(TAG, "will fetch: " + HOST_WITH_SCHEME + path);
+
 		URL url = null;
 		try {
 			url = new URL( HOST_WITH_SCHEME + path );
 		} catch (MalformedURLException e) {
-			Log.e("=ht=", "ERROR", e);
+			Log.e(TAG, "ERROR", e);
 			e.printStackTrace();
 		}
 
 		if (url != null) {
-
 			HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
 			// urlConn.setRequestProperty("User-Agent", AGENT);
 			BufferedInputStream in = new BufferedInputStream( urlConn.getInputStream() );

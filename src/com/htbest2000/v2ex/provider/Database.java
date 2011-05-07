@@ -92,6 +92,14 @@ public class Database {
 			public static final String NAME_CONTENT = "content";
 			public static final String NAME_CONTENT_RENDERED = "content_rendered";
 			public static final String NAME_REPLIES = "replies";
+			public static final String NAME_MEMBER_ID = "member_id";
+			public static final String NAME_MEMBER_USERNAME = "member_username";
+			public static final String NAME_NODE_ID = "node_id";
+			public static final String NAME_NODE_NAME = "node_name";
+			public static final String NAME_NODE_TITLE = "node_title";
+			public static final String NAME_NODE_TITLE_ALTERNATIVE = "node_title_alternative";
+			public static final String NAME_NODE_URL = "node_url";
+			public static final String NAME_NODE_TOPICS = "node_topics";
 			public static final String NAME_TIME = "time";
 
 			public static final int ID_TOPTIC_ID = 1;
@@ -101,6 +109,14 @@ public class Database {
 			public static final int ID_CONTENT_RENDERED = 5;
 			public static final int ID_REPLIES = 6;
 			public static final int ID_TIME = 7;
+			public static final int ID_MEMBER_ID = 8;
+			public static final int ID_MEMBER_NAME = 9;
+			public static final int ID_NODE_ID = 10;
+			public static final int ID_NODE_NAME = 11;
+			public static final int ID_NODE_TITLE = 12;
+			public static final int ID_NODE_TITLE_ALTERNATIVE = 13;
+			public static final int ID_NODE_URL = 14;
+			public static final int ID_NODE_TOPICS = 15;
 		}
 		public static class Nodes implements BaseColumns {
 			public static final String NAME_NODE_ID = "node_id";
@@ -126,7 +142,7 @@ public class Database {
 	}
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
-        private static final int    DATABASE_VERSION = 2;
+        private static final int    DATABASE_VERSION = 3;
         private static final String DATABASE_NAME = "data.db";
 
         private static String[] CREATE_TABLES; 
