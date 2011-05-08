@@ -137,8 +137,12 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 				this.startManagingCursor(cur);
 				mTopicsAdapter = new SimpleCursorAdapter(this, R.layout.topic_list_row, cur,
 						new String[] { Database.Columns.Topics.NAME_TITLE, 
-										Database.Columns.Topics.NAME_CONTENT, },
-						new int[] { R.id.topic_title, R.id.topic_content});
+										Database.Columns.Topics.NAME_CONTENT,
+										Database.Columns.Topics.NAME_REPLIES,
+										Database.Columns.Topics.NAME_MEMBER_USERNAME,
+										Database.Columns.Topics.NAME_NODE_TITLE,},
+						new int[] { R.id.topic_title, R.id.topic_content, R.id.topic_replies,
+									R.id.topic_author, R.id.topic_node});
 
 				assertNotNull(mTopicsAdapter);
 				assertNotNull(mTopicList);

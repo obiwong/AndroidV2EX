@@ -20,14 +20,44 @@
 	android:paddingLeft="4dp" android:paddingRight="4dp"
 	android:paddingTop="5dp" android:paddingBottom="5dp"
 	android:background="@drawable/topic_content_header">
-	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-		      android:id="@+id/topic_title"
-		      android:text="TextView"
-		      android:textSize="20sp" android:textColor="@color/topic_row_title"/>
-	<TextView android:layout_width="fill_parent" android:layout_height="wrap_content"
-	          android:text="TextView"
-		      android:id="@+id/topic_content"
-		      android:textSize="16sp" android:textColor="@color/topic_row_content"
+
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+	              android:orientation="horizontal">
+	   <TextView android:id="@+id/topic_author"
+	       android:text="author"
+	       android:layout_width="wrap_content" android:layout_height="wrap_content"
+	       style="@style/TextTopicInfo"/>
+       <TextView
+           android:text="in"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfoTitle"/>
+       <TextView android:id="@+id/topic_node"
+           android:text="node"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfo"/>
+	</LinearLayout>
+
+	<TextView android:id="@+id/topic_title"
+	          android:text="Title"
+		      android:layout_width="fill_parent" android:layout_height="wrap_content"
+		      android:textSize="22sp" android:textColor="@color/topic_row_title"/>
+
+	<TextView android:id="@+id/topic_content"
+	          android:text="Content"
+              android:layout_width="fill_parent" android:layout_height="wrap_content"
+		      android:textSize="17sp" android:textColor="@color/topic_row_content"
 		      android:ellipsize="none"
 		      android:padding="4dp"/>
+
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+       <TextView android:id="@+id/topic_replies"
+           android:text="xxx"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfo"/>
+       <TextView
+           android:text="replies"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfoTitle"/>
+    </LinearLayout>
 </LinearLayout>
