@@ -15,6 +15,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="fill_parent" android:orientation="vertical" android:layout_height="wrap_content">
     <LinearLayout style="@style/TitleBar">
@@ -40,15 +41,52 @@
     </LinearLayout>
 
 	<ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1"
-		        android:layout_height="fill_parent">
-		<LinearLayout
-			android:orientation="vertical" android:layout_width="fill_parent"
-			android:layout_height="fill_parent">
-			<TextView android:layout_height="wrap_content" android:text="TextView"
-				android:id="@+id/topic_title" android:layout_width="fill_parent" android:layout_gravity="center_vertical" android:layout_weight="0" android:textSize="22sp" android:paddingLeft="8dp" android:paddingRight="8dp" android:textStyle="bold"></TextView>
-			<ImageView android:layout_height="wrap_content" android:src="@drawable/topic_title_tailer" android:layout_width="fill_parent"></ImageView>
-			<TextView android:text="TextView" android:id="@+id/topic_content"
-				android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_weight="1" android:textSize="18sp" android:paddingLeft="4dp" android:paddingRight="4dp" android:paddingTop="5dp"></TextView>
-		</LinearLayout>
+		        android:layout_height="fill_parent"
+		        android:layout_margin="4dp">
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:background="@drawable/topic_content_header">
+
+        <!-- topic info, just like node, author, etc. -->
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <TextView android:id="@+id/topic_author"
+                      android:text="author"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      style="@style/TextTopicInfo"/>
+                <TextView android:text="in"
+                          android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          style="@style/TextTopicInfoTitle"/>
+                <TextView android:id="@+id/topic_node"
+                          android:text="node"
+                          android:layout_width="wrap_content" android:layout_height="wrap_content"
+                          style="@style/TextTopicInfo"/>
+        </LinearLayout>
+
+        <TextView android:id="@+id/topic_title"
+                  android:text="Title"
+                  android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="22sp" android:textColor="@color/topic_row_title"/>
+
+        <!-- content -->
+        <TextView android:id="@+id/topic_content"
+                  android:text="Content"
+                  android:layout_width="fill_parent" android:layout_height="wrap_content"
+                  android:textSize="17sp"
+                  android:ellipsize="none"
+                  android:padding="4dp"/>
+
+        <!-- topic replies -->
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            <TextView android:id="@+id/topic_replies"
+                      android:text="xxx"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      style="@style/TextTopicInfo"/>
+            <TextView android:text="replies"
+                      android:layout_width="wrap_content" android:layout_height="wrap_content"
+                      style="@style/TextTopicInfoTitle"/>
+        </LinearLayout>
+    </LinearLayout>
 	</ScrollView>
 </LinearLayout>

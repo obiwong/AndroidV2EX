@@ -32,10 +32,12 @@ import com.htbest2000.v2ex.api.Topics;
 import com.htbest2000.v2ex.util.Misc;
 
 public class TopicActivity extends RoboActivity {
+	@InjectView(R.id.topic_author) private TextView mTopicAuthor;
+	@InjectView(R.id.topic_node) private TextView mTopicNode;
+	@InjectView(R.id.topic_replies) private TextView mTopicReplies;
 	@InjectView(R.id.topic_title) private TextView mTopicTitle;
-	//@InjectView(R.id.topic_replies_count) private TextView mTopicRepliesCount;
 	@InjectView(R.id.topic_content) private TextView mTopicContent;
-	
+
 	// @Inject LayoutInflater mLayoutInflater;
 	
 	Topics.Topic mTopic;
@@ -64,9 +66,11 @@ public class TopicActivity extends RoboActivity {
 
 
 	private void loadTopic() {
-		Topics.Topic topic = mTopic;
+		final Topics.Topic topic = mTopic;
 		mTopicTitle.setText(topic.title);
-		// mTopicRepliesCount.setText("" + topic.replies + " " + this.getString(R.string.replies));
+		mTopicAuthor.setText(topic.member_username);
+		mTopicNode.setText(topic.node_title);
+		mTopicReplies.setText(String.valueOf(topic.replies));
 		if (0 < topic.content.length()) {
 			mTopicContent.setVisibility(View.VISIBLE);
 			mTopicContent.setText(topic.content);

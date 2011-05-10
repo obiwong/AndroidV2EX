@@ -68,6 +68,14 @@ public class Misc {
 				topic.content = cursor.getString(Database.Columns.Topics.ID_CONTENT);
 				topic.content_rendered = cursor.getString(Database.Columns.Topics.ID_CONTENT_RENDERED);
 				topic.replies = cursor.getShort(Database.Columns.Topics.ID_REPLIES);
+				topic.member_id = cursor.getLong(Database.Columns.Topics.ID_MEMBER_ID);
+				topic.member_username = cursor.getString(Database.Columns.Topics.ID_MEMBER_NAME);
+				topic.node_id = cursor.getLong(Database.Columns.Topics.ID_NODE_ID);
+				topic.node_name = cursor.getString(Database.Columns.Topics.ID_NODE_NAME);
+				topic.node_title = cursor.getString(Database.Columns.Topics.ID_NODE_TITLE);
+				topic.node_title_alternative = cursor.getString(Database.Columns.Topics.ID_NODE_TITLE_ALTERNATIVE);
+				topic.node_topics = cursor.getInt(Database.Columns.Topics.ID_NODE_TOPICS);
+				topic.node_url = cursor.getString(Database.Columns.Topics.ID_NODE_URL);
 				return topic;
 			}
 			else {
