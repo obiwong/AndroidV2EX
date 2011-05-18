@@ -180,4 +180,32 @@ public class Misc {
 		if (null != cur)
 			cur.close();
 	}
+	
+	final static long YEAR  =   60 * 60 * 24 * 365;
+	final static long MONTH =   60 * 60 * 24 * 30;
+	final static long WEEK  =   60 * 60 * 24 * 6;
+	final static long DAY   =   60 * 60 * 24;
+	final static long HOUR  =   60 * 60;
+	final static long MIN   =   60;
+	
+
+	public static String formatRelativeTime(long interval) {
+		String ret = "";
+
+		if (interval >= YEAR) {
+			ret = "" + interval / YEAR + " year ago";
+		} else if (interval >= MONTH){
+			ret = "" + interval / MONTH + " month ago";
+		} else if (interval >= WEEK) {
+			ret = "" + interval / WEEK + " week ago";
+		} else if (interval >= DAY) {
+			ret = "" + interval / DAY + " day ago";
+		} else if (interval >= HOUR) {
+			ret = "" + interval / HOUR + " hour ago";
+		} else if (interval >= MIN) {
+			ret = "" + interval / MIN + " min ago";
+		}
+		
+		return ret;
+	}
 }

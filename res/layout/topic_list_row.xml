@@ -28,11 +28,20 @@
 	       android:layout_width="wrap_content" android:layout_height="wrap_content"
 	       style="@style/TextTopicInfo"/>
        <TextView
-           android:text="in"
+           android:text="@string/in"
            android:layout_width="wrap_content" android:layout_height="wrap_content"
            style="@style/TextTopicInfoTitle"/>
        <TextView android:id="@+id/topic_node"
            android:text="node"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfo"/>
+           
+       <TextView
+           android:text="@string/post_at"
+           android:layout_width="wrap_content" android:layout_height="wrap_content"
+           style="@style/TextTopicInfoTitle"/>
+       <TextView android:id="@+id/created"
+           android:text="post time"
            android:layout_width="wrap_content" android:layout_height="wrap_content"
            style="@style/TextTopicInfo"/>
 	</LinearLayout>
@@ -56,7 +65,7 @@
            android:layout_width="wrap_content" android:layout_height="wrap_content"
            style="@style/TextTopicInfo"/>
        <TextView
-           android:text="replies"
+           android:text="@string/replies"
            android:layout_width="wrap_content" android:layout_height="wrap_content"
            style="@style/TextTopicInfoTitle"/>
     </LinearLayout>

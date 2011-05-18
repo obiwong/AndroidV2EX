@@ -51,13 +51,16 @@ public class TestApi extends AndroidTestCase{
 		final Topics.Topic expects[] = {
 				new Topics.Topic(1, "title 1", "url 1", "content 1", "content_rendered 1", 1,
 						1, "member username 1",
-						1, "node name 1", "node title 1", "node title_alternative 1", "node url 1", 1),
+						1, "node name 1", "node title 1", "node title_alternative 1", "node url 1", 1,
+						"create 1", "modify 1", "touch 1"),
 				new Topics.Topic(2, "title 2", "url 2", "content 2", "content_rendered 2", 2,
 						2, "member username 2",
-						2, "node name 2", "node title 2", "node title_alternative 2", "node url 2", 2),
+						2, "node name 2", "node title 2", "node title_alternative 2", "node url 2", 2,
+						"create 2", "modify 2", "touch 2"),
 				new Topics.Topic(3, "title 3", "url 3", "content 3", "content_rendered 3", 3,
 						3, "member username 3",
-						3, "node name 3", "node title 3", "node title_alternative 3", "node url 3", 3),
+						3, "node name 3", "node title 3", "node title_alternative 3", "node url 3", 3,
+						"create 3", "modify 3", "touch 3"),
 		};
 		Topics topics = new Topics();
 		topics.setVisitor(new Topics.Visitor() {
@@ -82,6 +85,10 @@ public class TestApi extends AndroidTestCase{
 				assertEquals(expects[count].node_title_alternative, topic.node_title_alternative);
 				assertEquals(expects[count].node_url, topic.node_url);
 				assertEquals(expects[count].node_topics, topic.node_topics);
+				
+				assertEquals(expects[count].created, topic.created);
+				assertEquals(expects[count].last_modified, topic.last_modified);
+				assertEquals(expects[count].last_touched, topic.last_touched);
 				
 				count++;
 			}

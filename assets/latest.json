@@ -19,7 +19,10 @@
             "title_alternative" : "node title_alternative 1",
             "url" : "node url 1",
             "topics" : 1
-        }
+        },
+        "created" : "create 1",
+        "last_modified" : "modify 1",
+        "last_touched" : "touch 1"
     }
     
     ,
@@ -42,7 +45,10 @@
             "title_alternative" : "node title_alternative 2",
             "url" : "node url 2",
             "topics" : 2
-        }
+        },
+        "created" : "create 2",
+        "last_modified" : "modify 2",
+        "last_touched" : "touch 2"
     }
     
     ,
@@ -65,7 +71,10 @@
             "title_alternative" : "node title_alternative 3",
             "url" : "node url 3",
             "topics" : 3
-        }
+        },
+        "created" : "create 3",
+        "last_modified" : "modify 3",
+        "last_touched" : "touch 3"
     }
 
     

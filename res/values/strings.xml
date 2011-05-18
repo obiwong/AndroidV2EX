@@ -23,7 +23,10 @@
     <string name="description_refresh">Refresh</string>
     <string name="description_search">Search</string>
 
-    <string name="replies">Replies</string>
+    <string name="replies">replies</string>
+    <string name="in">in</string>
+    <string name="post_at">at</string>
+    
 
     <!--
         SQL Statements
@@ -37,7 +40,6 @@
 			content TEXT,
 			content_rendered TEXT,
 			replies INTEGER,
-			time INTEGER,
 			member_id INTEGER,
 			member_username TEXT,
 			node_id INTEGER,
@@ -45,7 +47,10 @@
 			node_title TEXT,
 			node_title_alternative TEXT,
 			node_url TEXT,
-			node_topics INTEGER
+			node_topics INTEGER,
+			created TEXT,
+			last_modified TEXT,
+			last_touched TEXT
 			);</item>
 
 		<item>CREATE TABLE nodes (

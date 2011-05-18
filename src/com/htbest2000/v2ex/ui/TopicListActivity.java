@@ -32,6 +32,9 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.TimeZone;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
@@ -46,6 +49,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -140,9 +144,10 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 										Database.Columns.Topics.NAME_CONTENT,
 										Database.Columns.Topics.NAME_REPLIES,
 										Database.Columns.Topics.NAME_MEMBER_USERNAME,
-										Database.Columns.Topics.NAME_NODE_TITLE,},
+										Database.Columns.Topics.NAME_NODE_TITLE,
+										Database.Columns.Topics.NAME_CREATED,},
 						new int[] { R.id.topic_title, R.id.topic_content, R.id.topic_replies,
-									R.id.topic_author, R.id.topic_node});
+									R.id.topic_author, R.id.topic_node, R.id.created});
 
 				assertNotNull(mTopicsAdapter);
 				assertNotNull(mTopicList);
@@ -150,12 +155,14 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 				mTopicsAdapter.setViewBinder(new ViewBinder() {
 					@Override
 					public boolean setViewValue(View view, Cursor cur, int field) {
-						final int target_field = Database.Columns.Topics.ID_CONTENT;
-						if (target_field == field) {
-							TextView tv = (TextView)view;
-							String content = cur.getString(target_field);
+						final int content_field = Database.Columns.Topics.ID_CONTENT;
+						final int created_field = Database.Columns.Topics.ID_CREATED;
+						
+						if (content_field == field) {
+							final TextView tv = (TextView)view;
+							String content = cur.getString(content_field);
 							if (null == content)
-								content = ""; 
+								content = "";
 							if (content.length() > CONTENT_MAX_LEN) {
 								content = content.substring(0, CONTENT_MAX_LEN-1) + "...";
 							}
@@ -164,6 +171,19 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 							} else {
 								tv.setText( content );
 								tv.setVisibility(View.VISIBLE);
+							}
+							return true;
+						} else if (created_field == field) {
+							final TextView tv = (TextView)view;
+							final String raw = cur.getString(created_field);
+							if (raw != null && 0!=raw.length()) {
+								String ret = "";
+								long postAt = Timestamp.valueOf(raw).getTime();
+								long curr = System.currentTimeMillis();
+								final int  timeZone = TimeZone.getDefault().getOffset(postAt);
+								long interval = (curr - Timestamp.valueOf(raw).getTime() - timeZone) / 1000;
+								ret = Misc.formatRelativeTime(interval);
+								tv.setText(ret);
 							}
 							return true;
 						}

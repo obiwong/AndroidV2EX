@@ -150,7 +150,6 @@ public class SyncService extends RoboIntentService {
 							cv.put(Database.Columns.Topics.NAME_CONTENT, topic.content);
 							cv.put(Database.Columns.Topics.NAME_CONTENT_RENDERED, topic.content_rendered);
 							cv.put(Database.Columns.Topics.NAME_REPLIES, topic.replies);
-							cv.put(Database.Columns.Topics.NAME_TIME, System.currentTimeMillis());
 							cv.put(Database.Columns.Topics.NAME_MEMBER_USERNAME, topic.member_username);
 							cv.put(Database.Columns.Topics.NAME_MEMBER_ID, topic.member_id);
 							cv.put(Database.Columns.Topics.NAME_NODE_ID, topic.node_id);
@@ -159,6 +158,9 @@ public class SyncService extends RoboIntentService {
 							cv.put(Database.Columns.Topics.NAME_NODE_TITLE_ALTERNATIVE, topic.node_title_alternative);
 							cv.put(Database.Columns.Topics.NAME_NODE_URL, topic.node_url);
 							cv.put(Database.Columns.Topics.NAME_NODE_TOPICS, topic.node_topics);
+							cv.put(Database.Columns.Topics.NAME_CREATED, topic.created);
+							cv.put(Database.Columns.Topics.NAME_LAST_MODIFIED, topic.last_modified);
+							cv.put(Database.Columns.Topics.NAME_LAST_TOUCHED, topic.last_touched);
 
 							db.insert(Database.TABLE_TOPICS, cv);
 						}

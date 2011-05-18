@@ -27,7 +27,8 @@ public class Topics {
 		public Topic(long _id, String _title, String _url, String _content, String _cr, int _replies,
 				long _member_id, String _member_username,
 				long _node_id, String _node_name, String _node_title, String _node_title_alternative,
-					String _node_url, int _node_topics) {
+					String _node_url, int _node_topics, 
+					String _created, String _last_modified, String _last_touched) {
 			id = _id;
 			title = _title;
 			url = _url;
@@ -44,6 +45,10 @@ public class Topics {
 			node_title_alternative = _node_title_alternative;
 			node_url = _node_url;
 			node_topics = _node_topics;
+			
+			created = _created;
+			last_modified = _last_modified;
+			last_touched = _last_touched;
 		}
 		
 		public Topic(){
@@ -67,8 +72,12 @@ public class Topics {
 		public String node_url;
 		public int    node_topics;
 		
+		public String created;
+		public String last_modified;
+		public String last_touched;
+		
 		public String toString() {
-			return "Topic with id: " + id + ", title: " + title;
+			return "Topic with id: " + id + ", title: " + title + ", by: " + member_username + ", at: " + created;
 		}
 	}
 	
