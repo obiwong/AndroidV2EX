@@ -42,10 +42,11 @@
 
 	<ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1"
 		        android:layout_height="fill_parent"
-		        android:layout_margin="4dp">
+		        android:layout_margin="@dimen/topic_scrollview_margin">
     <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
                   android:orientation="vertical"
-                  android:background="@drawable/topic_content_header">
+                  android:background="@drawable/topic_content_header"
+                  android:padding="@dimen/topic_frame_padding">
 
         <!-- topic info, just like node, author, etc. -->
         <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content"
