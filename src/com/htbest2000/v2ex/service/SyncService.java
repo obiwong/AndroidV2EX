@@ -134,11 +134,9 @@ public class SyncService extends RoboIntentService {
 	
 	private Downloader.Command getTopicListCommand() {
 		return new Downloader.Command() {
-			@Override
 			public void onFeed(BufferedInputStream in) {
 				Topics topics = new Topics();
 				topics.setVisitor(new Topics.Visitor() {
-					@Override
 					public void visit(Topic topic) {
 						if (DEBUG) Log.i(TAG, "visit a topic :" + topic.toString());
 						final Database db = Database.getInstance(SyncService.this);
