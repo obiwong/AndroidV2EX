@@ -20,9 +20,9 @@
             "url" : "node url 1",
             "topics" : 1
         },
-        "created" : "create 1",
-        "last_modified" : "modify 1",
-        "last_touched" : "touch 1"
+        "created" : "2011-06-19 03:30:34.621372",
+        "last_modified" : "2011-06-19 03:49:58.775316",
+        "last_touched" : "2011-06-19 03:49:56.657343"
     }
     
     ,
@@ -46,9 +46,9 @@
             "url" : "node url 2",
             "topics" : 2
         },
-        "created" : "create 2",
-        "last_modified" : "modify 2",
-        "last_touched" : "touch 2"
+        "created" : "2011-06-19 03:12:11.244812",
+        "last_modified" : "2011-06-19 03:51:13.308806",
+        "last_touched" : "2011-06-19 03:13:52.644824"
     }
     
     ,
@@ -72,9 +72,9 @@
             "url" : "node url 3",
             "topics" : 3
         },
-        "created" : "create 3",
-        "last_modified" : "modify 3",
-        "last_touched" : "touch 3"
+        "created" : "2011-06-19 03:04:13.258268",
+        "last_modified" : "2011-06-19 03:50:23.975306",
+        "last_touched" : "2011-06-19 03:04:13.282325"
     }
 
     

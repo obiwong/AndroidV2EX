@@ -16,5 +16,5 @@
 -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:title="Login" android:id="@+id/menu_login"></item>
-	<item android:title="Test" android:id="@+id/menu_test"></item>
+	<item android:title="Settings" android:id="@+id/menu_settings"></item>
 </menu>

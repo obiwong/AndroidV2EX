@@ -2,6 +2,7 @@ package com.htbest2000.v2ex.test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
 import android.content.res.AssetManager;
 import android.test.AndroidTestCase;
@@ -17,9 +18,9 @@ public class TestApi extends AndroidTestCase{
 	
 	@Override
 	protected void setUp() throws Exception {
+		super.setUp();
 		mAssetMgr = mContext.getResources().getAssets();
 		assertNotNull(mAssetMgr);
-		super.setUp();
 	}
 
 	public void testSite() {
@@ -52,15 +53,21 @@ public class TestApi extends AndroidTestCase{
 				new Topics.Topic(1, "title 1", "url 1", "content 1", "content_rendered 1", 1,
 						1, "member username 1",
 						1, "node name 1", "node title 1", "node title_alternative 1", "node url 1", 1,
-						"create 1", "modify 1", "touch 1"),
+						Timestamp.valueOf("2011-06-19 03:30:34.621372").getTime(),
+						Timestamp.valueOf("2011-06-19 03:49:58.775316").getTime(),
+						Timestamp.valueOf("2011-06-19 03:49:56.657343").getTime()),
 				new Topics.Topic(2, "title 2", "url 2", "content 2", "content_rendered 2", 2,
 						2, "member username 2",
 						2, "node name 2", "node title 2", "node title_alternative 2", "node url 2", 2,
-						"create 2", "modify 2", "touch 2"),
+						Timestamp.valueOf("2011-06-19 03:12:11.244812").getTime(),
+						Timestamp.valueOf("2011-06-19 03:51:13.308806").getTime(),
+						Timestamp.valueOf("2011-06-19 03:13:52.644824").getTime()),
 				new Topics.Topic(3, "title 3", "url 3", "content 3", "content_rendered 3", 3,
 						3, "member username 3",
 						3, "node name 3", "node title 3", "node title_alternative 3", "node url 3", 3,
-						"create 3", "modify 3", "touch 3"),
+						Timestamp.valueOf("2011-06-19 03:04:13.258268").getTime(),
+						Timestamp.valueOf("2011-06-19 03:50:23.975306").getTime(),
+						Timestamp.valueOf("2011-06-19 03:04:13.282325").getTime()),
 		};
 		Topics topics = new Topics();
 		topics.setVisitor(new Topics.Visitor() {

@@ -62,6 +62,13 @@
 		<activity android:name=".ui.LoginActivity"
 		          android:theme="@style/Theme.V2EX">
         </activity>
+        
+        <activity android:name=".ui.SettingsActivity" android:label="@string/settings">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        
 		          
         <service android:name=".service.SyncService" />
 

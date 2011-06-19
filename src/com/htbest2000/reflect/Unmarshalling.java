@@ -30,16 +30,29 @@ public abstract class Unmarshalling<T> {
 	protected final String   mCoding;
 	protected final Class<T>  mClazz;
 
-	//------------------------------------------------
+	protected final New<T>      mNew = new New<T>();
 
 	protected final HashMap<String, Class<?>> mNumberMap = new HashMap<String, Class<?>>();
-	
+	protected final HashMap<String, Customize<?,?>> mCustomizeMap = new HashMap<String, Customize<?,?>>();
+
+	//------------------------------------------------
+
 	public void setNumberMap(String name, Class<?> value) {
 		mNumberMap.put(name, value);
 	}
 
 	public void clearNumberMap() {
 		mNumberMap.clear();
+	}
+	
+	//------------------------------------------------
+	
+	public static interface Customize<D,S> {
+		public D inflate( Object object );
+	}
+
+	public void addCustomize(String name, Customize<?,?> cust) {
+		mCustomizeMap.put(name, cust);
 	}
 
 	//------------------------------------------------
@@ -78,29 +91,55 @@ public abstract class Unmarshalling<T> {
 				break;
 			}
 
-			String name = "";
+			final StringBuilder nameBuilder = new StringBuilder();
 			for (String n : parents) {
-				name += n + "_";
+				nameBuilder.append(n).append("_");
 			}
-			name = name + reader.nextName();
+			nameBuilder.append(reader.nextName());
+			final String name = nameBuilder.toString();
 			JsonToken tok = reader.peek();
 
 			if (JsonToken.STRING.equals(tok)) {
-				dataMap.put(name, reader.nextString());
+				String str = reader.nextString();
+				if (mCustomizeMap.containsKey(name)) {
+					dataMap.put(name, mCustomizeMap.get(name).inflate(str));
+				} else {
+					dataMap.put(name, str);
+				}
 			} else if (JsonToken.NULL.equals(tok)) {
 				dataMap.put(name, null);
 				reader.nextNull();
 			} else if (JsonToken.BOOLEAN.equals(tok)) {
-				dataMap.put(name, reader.nextBoolean());
+				boolean boo = reader.nextBoolean();
+				if (mCustomizeMap.containsKey(name)) {
+					dataMap.put(name, mCustomizeMap.get(name).inflate(boo));
+				} else {
+					dataMap.put(name, boo);
+				}
 			} else if (JsonToken.NUMBER.equals(tok)) {
 				Class<?> clazz = mNumberMap.get(name);
 				if (null != clazz) {
 					if (Integer.class.equals(clazz)) {
-						dataMap.put(name, reader.nextInt());
+						Integer val = reader.nextInt();
+						if (mCustomizeMap.containsKey(name)) {
+							dataMap.put(name, mCustomizeMap.get(name).inflate(val));
+						} else {
+							dataMap.put(name, val);
+						}
 					} else if (Long.class.equals(clazz)) {
-						dataMap.put(name, reader.nextLong());
+						Long val = reader.nextLong();
+						if (mCustomizeMap.containsKey(name)) {
+							dataMap.put(name, mCustomizeMap.get(name).inflate(val));
+						} else {
+							dataMap.put(name, val);
+						}
 					} else if (Double.class.equals(clazz)) {
-						dataMap.put(name, reader.nextDouble());
+						Double val = reader.nextDouble();
+						if (mCustomizeMap.containsKey(name)) {
+							dataMap.put(name, mCustomizeMap.get(name).inflate(val));
+						} else {
+							dataMap.put(name, val);
+						}
 					}
 				}
 			} else if (JsonToken.BEGIN_OBJECT.equals(tok)) {
@@ -125,7 +164,7 @@ public abstract class Unmarshalling<T> {
 			JsonReader reader = new JsonReader(new InputStreamReader(mIn, mCoding));
 			HashMap<String, Object> dataMap = new HashMap<String, Object>();
 			collectData( reader, dataMap );
-			createObject( New.inflate(dataMap, mClazz) );
+			createObject( mNew.inflate(dataMap, mClazz) );
 			reader.close();
 			mIn.close();
 		}
@@ -152,7 +191,7 @@ public abstract class Unmarshalling<T> {
 				dataMap.clear();
 				collectData(reader, dataMap);
 				
-				createObject( New.inflate(dataMap, mClazz) );
+				createObject( mNew.inflate(dataMap, mClazz) );
 			}
 			reader.close();
 			mIn.close();

@@ -49,6 +49,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -117,8 +118,6 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
 		if (cm != null && cm.getActiveNetworkInfo() != null) {
-			Database.getInstance(this).delete(Database.TABLE_TOPICS, null, null);
-
 			final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, SyncService.class);
 			intent.putExtra(SyncService.EXTRA_STATUS_RECEIVER, mState.mReceiver);
 			intent.putExtra(SyncService.OPERATOR, SyncService.OPERATOR_FETCH_TOPIC_LIST);
@@ -149,9 +148,6 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 						new int[] { R.id.topic_title, R.id.topic_content, R.id.topic_replies,
 									R.id.topic_author, R.id.topic_node, R.id.created});
 
-				assertNotNull(mTopicsAdapter);
-				assertNotNull(mTopicList);
-				
 				mTopicsAdapter.setViewBinder(new ViewBinder() {
 					@Override
 					public boolean setViewValue(View view, Cursor cur, int field) {
@@ -175,16 +171,12 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 							return true;
 						} else if (created_field == field) {
 							final TextView tv = (TextView)view;
-							final String raw = cur.getString(created_field);
-							if (raw != null && 0!=raw.length()) {
-								String ret = "";
-								long postAt = Timestamp.valueOf(raw).getTime();
-								long curr = System.currentTimeMillis();
-								final int  timeZone = TimeZone.getDefault().getOffset(postAt);
-								long interval = (curr - Timestamp.valueOf(raw).getTime() - timeZone) / 1000;
-								ret = Misc.formatRelativeTime(interval);
-								tv.setText(ret);
-							}
+							final long postAt = cur.getLong(created_field);
+							final long curr = System.currentTimeMillis();
+							final int timeZone = TimeZone.getDefault().getOffset(postAt);
+							final long interval = (curr - postAt - timeZone) / 1000;
+							String ret = Misc.formatRelativeTime(interval);
+							tv.setText(ret);
 							return true;
 						}
 						return false;
@@ -217,51 +209,25 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_login:
+		case R.id.menu_login: {
 			Intent i = new Intent(this, LoginActivity.class);
 			startActivity(i);
 			break;
+		}
 
-		case R.id.menu_test: {
-			Downloader.Command command = new Downloader.Command() {
-				
-				@Override
-				public void onPostOut(BufferedOutputStream out) throws IOException {
-					BufferedWriter writer = new BufferedWriter( new OutputStreamWriter(out));
-					writer.append("test title,");
-					writer.append("test body test body test body test body test body test body test body test body test body");					
-				}
-				
-				@Override
-				public void onPostIn(BufferedInputStream in) throws IOException {
-					// TODO Auto-generated method stub
-					Misc.dump("post: ", in);
-				}
-				
-				@Override
-				public void onFeed(BufferedInputStream in) throws IOException {
-					Misc.dump("post ret: ", in);
-				}
-			};
-
-			Downloader ldr = new Downloader();
-			ldr.setCommand(command);
-			try {
-				ldr.post("/api/topics/create.json?node_name=528491");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			}
+		case R.id.menu_settings: {
+			Intent i = new Intent(this, SettingsActivity.class);
+			startActivity(i);
 			break;
+		}
 
-		default:
+		default: {
 			break;
+		}
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
+	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
@@ -278,6 +244,7 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
         		mRefreshView.setFocusable(true);
         		mRefreshView.setClickable(true);
         		mRefreshView.clearAnimation();
+        		removeOldTopics();
         		setupTopicListAdapter();
         		break;
         	}
@@ -295,6 +262,13 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
         		break;
         	}
         }
+	}
+	
+	private void removeOldTopics() {
+		// get settings
+		int days = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("days_to_sync", "7"));
+//		int
+//		Database.getInstance(this).delete(Database.TABLE_TOPICS, Database.Columns.Topics.NAME_CREATED+"<", null);
 	}
 	
 	private static class MyState extends State {

@@ -17,12 +17,11 @@
 package com.htbest2000.reflect;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 
 import android.util.Log;
 
-public class New {
+public class New<T> {
 	public static final String TAG = "=AV2EX=New=";
 
 	/**
@@ -30,40 +29,50 @@ public class New {
 	 * @param src the values
 	 * @param type the class class
 	 * @return object with fulfilled values
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws InstantiationException 
 	 */
-	public static <T> T inflate( HashMap<String, ?> src, Class<T> type ) {
-        T ret;
-        try {
-            ret = type.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            Log.e(TAG, "InstantiationException: " + e.toString());
-            return null;
-        } catch (IllegalAccessException e) {
-        	Log.e(TAG, "IllegalAccessException: " + e.toString());
-            e.printStackTrace();
-            return null;
-        }
+	public T inflate( HashMap<String, ?> src, Class<T> type ) {
+		T ret;
+		try {
+			ret = type.newInstance();
+		} catch (IllegalAccessException e) {
+			Log.i(TAG, "New.inflate failed");
+			e.printStackTrace();
+			return null;
+		} catch (InstantiationException e) {
+			Log.i(TAG, "New.inflate failed");
+			e.printStackTrace();
+			return null;
+		}
 
-        final Field[] fields = type.getFields();
-        for (Field field : fields) {
-            String name = field.getName();
-            Class<?> field_type = field.getType();
-            try {
-            	if (field_type.equals(String.class)) {
-            		field.set(ret, src.get(name));
-            	} else if (field_type.equals(Integer.class) || field_type.equals(int.class)) {
-            		field.setInt(ret, (Integer)src.get(name));
-            	} else if (field_type.equals(Long.class) || field_type.equals(long.class)) {
-            		field.setLong(ret, (Long)src.get(name));
-            	}
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.i(TAG, "set field failed: " + e.toString());
-                return null;
-            }
-        }
+		final Field[] fields = type.getFields();
+		for (Field field : fields) {
+			String name = field.getName();
+			try {
+				Class<?> field_type = field.getType();
+				if (field_type.equals(String.class)) {
+					field.set(ret, src.get(name));
+				} else if (field_type.equals(Integer.class) || field_type.equals(int.class)) {
+					field.setInt(ret, (Integer)src.get(name));
+				} else if (field_type.equals(Long.class) || field_type.equals(long.class)) {
+					Long val = (Long)src.get(name);
+					field.setLong(ret, val.longValue());
+				}
+			} catch (IllegalArgumentException e) {
+				Log.i(TAG, "New.inflate failed");
+				e.printStackTrace();
+				return null;
+			} catch (IllegalAccessException e) {
+				Log.i(TAG, "New.inflate failed");
+				e.printStackTrace();
+				return null;
+			}
+		}
 
-        return ret;
-    }
+		return ret;
+	}
+
+
 }

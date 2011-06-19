@@ -27,6 +27,38 @@
     <string name="in">in</string>
     <string name="post_at">at</string>
     
+    <string name="settings">Settings</string>
+    
+    <string-array name="auto_update_interval_entries">
+      <item>manually</item>
+      <item>every 10 minute</item>
+      <item>every 30 minute</item>
+      <item>every 1 hours</item>
+      <item>every 2 hours</item>
+    </string-array>
+    
+    <string-array name="auto_update_interval_values">
+      <item>0</item>
+      <item>10</item>
+      <item>30</item>
+      <item>60</item>
+      <item>120</item>
+    </string-array>
+    
+    <string-array name="days_to_sync_entries">
+      <item>1 day</item>
+      <item>1 week</item>
+      <item>1 month</item>
+      <item>3 month</item>
+    </string-array>
+    
+    <string-array name="days_to_sync_values">
+      <item>1</item>
+      <item>7</item>
+      <item>30</item>
+      <item>90</item>
+    </string-array>
+    
 
     <!--
         SQL Statements
@@ -48,9 +80,9 @@
 			node_title_alternative TEXT,
 			node_url TEXT,
 			node_topics INTEGER,
-			created TEXT,
-			last_modified TEXT,
-			last_touched TEXT
+			created INTEGER,
+			last_modified INTEGER,
+			last_touched INTEGER
 			);</item>
 
 		<item>CREATE TABLE nodes (

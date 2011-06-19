@@ -27,14 +27,16 @@ public class TestReflect extends TestCase {
 	}
 	
 	public void testNewInflate() {
+		New<Foobar> foobarNew = new New<Foobar>();
 	    HashMap<String, Object> maps = new HashMap<String, Object>();
+
         maps.put("foo", "the foo");
         maps.put("bar", "the bar");
         maps.put("bar", "the bar");
         maps.put("id", new Long(1));
         maps.put("version", new Integer(3));
 
-        Foobar foobar = New.inflate(maps, Foobar.class);
+        Foobar foobar = foobarNew.inflate(maps, Foobar.class);
         assertNotNull(foobar);
         assertEquals( "the foo", foobar.foo );
         assertEquals( "the bar", foobar.bar );

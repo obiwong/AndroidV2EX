@@ -18,8 +18,10 @@ package com.htbest2000.v2ex.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 
 import com.htbest2000.reflect.Unmarshalling;
+import com.htbest2000.reflect.Unmarshalling.Customize;
 
 public class Topics {
 
@@ -28,7 +30,7 @@ public class Topics {
 				long _member_id, String _member_username,
 				long _node_id, String _node_name, String _node_title, String _node_title_alternative,
 					String _node_url, int _node_topics, 
-					String _created, String _last_modified, String _last_touched) {
+					Long _created, Long _last_modified, Long _last_touched) {
 			id = _id;
 			title = _title;
 			url = _url;
@@ -72,9 +74,9 @@ public class Topics {
 		public String node_url;
 		public int    node_topics;
 		
-		public String created;
-		public String last_modified;
-		public String last_touched;
+		public long created;
+		public long last_modified;
+		public long last_touched;
 		
 		public String toString() {
 			return "Topic with id: " + id + ", title: " + title + ", by: " + member_username + ", at: " + created;
@@ -111,6 +113,28 @@ public class Topics {
 			setNumberMap("member_id", Long.class);
 			setNumberMap("node_id", Long.class);
 			setNumberMap("node_topics", Integer.class);
+			
+			addCustomize("created", new Customize<Long, String>() {
+				@Override
+				public Long inflate(Object object) {
+					final String str = (String)object;
+					return Timestamp.valueOf(str).getTime();
+				}
+			});
+			addCustomize("last_modified", new Customize<Long, String>() {
+				@Override
+				public Long inflate(Object object) {
+					final String str = (String)object;
+					return Timestamp.valueOf(str).getTime();
+				}
+			});
+			addCustomize("last_touched", new Customize<Long, String>() {
+				@Override
+				public Long inflate(Object object) {
+					final String str = (String)object;
+					return Timestamp.valueOf(str).getTime();
+				}
+			});
 		}
 
 		@Override

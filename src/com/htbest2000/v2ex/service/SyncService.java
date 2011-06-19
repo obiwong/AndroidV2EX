@@ -28,6 +28,7 @@ import com.htbest2000.v2ex.api.Topics.Topic;
 import com.htbest2000.v2ex.io.Downloader;
 import com.htbest2000.v2ex.provider.Database;
 import com.htbest2000.v2ex.util.Misc;
+import com.htbest2000.v2ex.util.StatFile;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -37,8 +38,7 @@ import android.util.Log;
 import roboguice.service.RoboIntentService;
 
 /**
- * Background Service that synchronizes data living in
- * Database.
+ * Background Service that synchronizes data living in Database.
  */
 public class SyncService extends RoboIntentService {
 	public static final boolean DEBUG = true;
@@ -80,6 +80,8 @@ public class SyncService extends RoboIntentService {
 		final ResultReceiver receiver = intent.getParcelableExtra(EXTRA_STATUS_RECEIVER);
 		if (receiver != null) receiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
+		StatFile.setSyncBusy(this, true);
+
 		try {
 			switch (operator) {
 			case OPERATOR_FETCH_TOPIC_LIST:
@@ -98,22 +100,26 @@ public class SyncService extends RoboIntentService {
             }
 		}
 		
+		StatFile.setSyncBusy(this, false);
+		
+		Log.i(TAG, "done sync: " + receiver);
+		
 		if (receiver != null)
 			receiver.send(STATUS_FINISHED, Bundle.EMPTY);
 	}
 
 	private void fetchTopicList(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_LIST) );
-		if (DEBUG) Log.i(TAG, "start fetchTopicList");
+		if (DEBUG) Log.d(TAG, "start fetchTopicList");
 		mDownloader.fetchHtml( path );
-		if (DEBUG) Log.i(TAG, "end fetchTopicList");
+		if (DEBUG) Log.d(TAG, "end fetchTopicList");
 	}
 
 	private void fetchNodes(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_NODES) );
-		if (DEBUG) Log.i(TAG, "start fetchNodes");
+		if (DEBUG) Log.d(TAG, "start fetchNodes");
 		mDownloader.fetchHtml(path);
-		if (DEBUG) Log.i(TAG, "end fetchNodes");
+		if (DEBUG) Log.d(TAG, "end fetchNodes");
 	}
 
 	private Downloader.Command commandFactory(int command) {
@@ -148,14 +154,17 @@ public class SyncService extends RoboIntentService {
 							cv.put(Database.Columns.Topics.NAME_CONTENT, topic.content);
 							cv.put(Database.Columns.Topics.NAME_CONTENT_RENDERED, topic.content_rendered);
 							cv.put(Database.Columns.Topics.NAME_REPLIES, topic.replies);
+							
 							cv.put(Database.Columns.Topics.NAME_MEMBER_USERNAME, topic.member_username);
 							cv.put(Database.Columns.Topics.NAME_MEMBER_ID, topic.member_id);
+							
 							cv.put(Database.Columns.Topics.NAME_NODE_ID, topic.node_id);
 							cv.put(Database.Columns.Topics.NAME_NODE_NAME, topic.node_name);
 							cv.put(Database.Columns.Topics.NAME_NODE_TITLE, topic.node_title);
 							cv.put(Database.Columns.Topics.NAME_NODE_TITLE_ALTERNATIVE, topic.node_title_alternative);
 							cv.put(Database.Columns.Topics.NAME_NODE_URL, topic.node_url);
 							cv.put(Database.Columns.Topics.NAME_NODE_TOPICS, topic.node_topics);
+							
 							cv.put(Database.Columns.Topics.NAME_CREATED, topic.created);
 							cv.put(Database.Columns.Topics.NAME_LAST_MODIFIED, topic.last_modified);
 							cv.put(Database.Columns.Topics.NAME_LAST_TOUCHED, topic.last_touched);

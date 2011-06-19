@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/settings">
+
+    <ListPreference
+        android:key="auto_update_interval"
+        android:title="Auto Update Interval"
+        android:entries="@array/auto_update_interval_entries"
+        android:entryValues="@array/auto_update_interval_values"
+        android:summary="Auto Update Interval summary"
+        android:defaultValue="2" />
+
+    <ListPreference
+        android:key="days_to_sync"
+        android:title="Number of days to sync"
+        android:entries="@array/days_to_sync_entries"
+        android:entryValues="@array/days_to_sync_values"
+        android:summary="Number of days to sync summary"
+        android:defaultValue="2" />
+
+</PreferenceScreen>
