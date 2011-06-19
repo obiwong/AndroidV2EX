@@ -169,7 +169,11 @@ public class SyncService extends RoboIntentService {
 							cv.put(Database.Columns.Topics.NAME_LAST_MODIFIED, topic.last_modified);
 							cv.put(Database.Columns.Topics.NAME_LAST_TOUCHED, topic.last_touched);
 
-							db.insert(Database.TABLE_TOPICS, cv);
+							if (Misc.getTopicCount(SyncService.this, topic.id) < 1) {
+								db.insert(Database.TABLE_TOPICS, cv);
+							} else {
+								db.update(Database.TABLE_TOPICS, cv, Database.Columns.Topics.NAME_TOPTIC_ID + "="+topic.id, null);
+							}
 						}
 					}
 				});
@@ -209,7 +213,7 @@ public class SyncService extends RoboIntentService {
 						cv.put(Database.Columns.Nodes.NAME_CREATED_TIME, node.created);
 
 						final Database db = Database.getInstance(SyncService.this);
-						if (DEBUG) Log.i(TAG, "count: " + Misc.getNodeCount(SyncService.this, node.id));
+						if (DEBUG) Log.d(TAG, "count: " + Misc.getNodeCount(SyncService.this, node.id));
 						if (Misc.getNodeCount(SyncService.this, node.id) < 1) {
 							db.insert(Database.TABLE_NODES, cv);
 						} else {

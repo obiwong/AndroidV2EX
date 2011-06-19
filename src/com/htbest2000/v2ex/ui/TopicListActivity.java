@@ -261,6 +261,12 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
         }
 	}
 	
+	public void onTitleBarLogoClick(View v) {
+		Intent i = new Intent(this, ActivityHome.class);
+		startActivity(i);
+		finish();
+	}
+
 	private void removeOldTopics() {
 		final int days = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("days_to_sync", "7"));
 		final long limit = System.currentTimeMillis() - days*24*60*60*1000;

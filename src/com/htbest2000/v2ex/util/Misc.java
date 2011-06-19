@@ -119,7 +119,7 @@ public class Misc {
 		try {
 			cursor = Database.getInstance(context).query(
 					Database.TABLE_TOPICS, null, 
-					Database.Columns.Topics._ID + "=" + id,
+					Database.Columns.Topics.NAME_TOPTIC_ID + "=" + id,
 					null, null, null, null);
 			if (null != cursor) {
 				ret = cursor.getCount();

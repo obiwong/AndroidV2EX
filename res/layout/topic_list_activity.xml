@@ -21,7 +21,8 @@
     >
     <LinearLayout style="@style/TitleBar">
         <ImageView style="@style/TitleBarLogo"
-                   android:contentDescription="@string/description_logo"/>
+                   android:contentDescription="@string/description_logo"
+                   android:onClick="onTitleBarLogoClick"/>
 
         <View style="@style/TitleBarSpring" />
         <ImageView style="@style/TitleBarSeparator" />
