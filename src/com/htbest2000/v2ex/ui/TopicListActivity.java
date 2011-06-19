@@ -16,7 +16,6 @@
 
 package com.htbest2000.v2ex.ui;
 
-import static junit.framework.Assert.assertNotNull;
 
 import com.htbest2000.v2ex.R;
 import com.htbest2000.v2ex.io.Downloader;
@@ -32,7 +31,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -110,7 +108,6 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 		super.onResume();
 		// setupTopicListAdapter();
 	}
-	
 	
 
 	/** Handle "refresh" title-bar action. */

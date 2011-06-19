@@ -37,6 +37,7 @@
       <item>every 2 hours</item>
     </string-array>
     
+    <string name="auto_update_interval_values_default">0</string>
     <string-array name="auto_update_interval_values">
       <item>0</item>
       <item>10</item>
@@ -52,6 +53,7 @@
       <item>3 month</item>
     </string-array>
     
+    <string name="days_to_sync_values_default">7</string>
     <string-array name="days_to_sync_values">
       <item>1</item>
       <item>7</item>
