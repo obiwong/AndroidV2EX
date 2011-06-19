@@ -262,12 +262,11 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 	}
 	
 	private void removeOldTopics() {
-		// get settings
-		int days = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("days_to_sync", "7"));
-//		int
-//		Database.getInstance(this).delete(Database.TABLE_TOPICS, Database.Columns.Topics.NAME_CREATED+"<", null);
+		final int days = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(this).getString("days_to_sync", "7"));
+		final long limit = System.currentTimeMillis() - days*24*60*60*1000;
+		Database.getInstance(this).delete(Database.TABLE_TOPICS, Database.Columns.Topics.NAME_CREATED+"<"+limit, null);
 	}
-	
+
 	private static class MyState extends State {
 		int mPos;
 	}

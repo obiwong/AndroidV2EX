@@ -190,7 +190,6 @@ public abstract class Unmarshalling<T> {
 
 				dataMap.clear();
 				collectData(reader, dataMap);
-				
 				createObject( mNew.inflate(dataMap, mClazz) );
 			}
 			reader.close();
