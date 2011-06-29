@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package com.htbest2000.v2ex.util;
+package com.htbest2000.v2ex.receiver;
 
+import com.htbest2000.v2ex.util.StatFile;
+
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.util.Log;
 
-public class StatFile {
-	private static final String FILENAME = "stat.conf";
-	private static final String SYNCING = "syncing";
-	
-	public static void setSyncBusy(Context ctx, boolean busy) {
-		
-		SharedPreferences spref = ctx.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
-		spref.edit().putInt(SYNCING, busy?1:0).commit();
-	}
-	
-	public static boolean getSyncBush(Context ctx) {
-		SharedPreferences spref = ctx.getSharedPreferences(FILENAME, Context.MODE_PRIVATE);
-		int stat = spref.getInt(SYNCING, -1);
-		return stat == 1;
+public class NormalReceiver extends BroadcastReceiver {
+	public static final boolean DEBUG = true;
+	public static final String TAG = "=AV2EX=NormalReceiver=";
+
+	@Override
+	public void onReceive(Context ctx, Intent intent) {
+		if (DEBUG) Log.i(TAG, "on boot");
+		if (StatFile.getSyncBush(ctx)) {
+			StatFile.setSyncBusy(ctx, false);
+		}
 	}
 }

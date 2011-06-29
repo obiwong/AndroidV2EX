@@ -73,6 +73,14 @@ public class SyncService extends RoboIntentService {
 	}
 
 	@Override
+	public void onDestroy() {
+		if (StatFile.getSyncBush(this)) {
+			StatFile.setSyncBusy(this, false);
+		}
+		super.onDestroy();
+	}
+
+	@Override
 	protected void onHandleIntent(Intent intent) {
 		final String path     = intent.getStringExtra(PATH);
 		final int    operator = intent.getIntExtra(   OPERATOR, -1);
@@ -111,14 +119,18 @@ public class SyncService extends RoboIntentService {
 	private void fetchTopicList(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_LIST) );
 		if (DEBUG) Log.d(TAG, "start fetchTopicList");
+		StatFile.setSyncBusy(this, true);
 		mDownloader.fetchHtml( path );
+		StatFile.setSyncBusy(this, false);
 		if (DEBUG) Log.d(TAG, "end fetchTopicList");
 	}
 
 	private void fetchNodes(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_NODES) );
 		if (DEBUG) Log.d(TAG, "start fetchNodes");
+		StatFile.setSyncBusy(this, true);
 		mDownloader.fetchHtml(path);
+		StatFile.setSyncBusy(this, false);
 		if (DEBUG) Log.d(TAG, "end fetchNodes");
 	}
 

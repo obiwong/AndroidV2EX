@@ -23,6 +23,7 @@ import com.htbest2000.v2ex.provider.Database;
 import com.htbest2000.v2ex.service.SyncService;
 import com.htbest2000.v2ex.util.DetachableResultReceiver;
 import com.htbest2000.v2ex.util.Misc;
+import com.htbest2000.v2ex.util.StatFile;
 import com.htbest2000.v2ex.util.ToastMaster;
 import com.htbest2000.v2ex.util.State;
 
@@ -107,6 +108,9 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 	protected void onResume() {
 		super.onResume();
 		// setupTopicListAdapter();
+		if (StatFile.getSyncBush(this) && !mState.mSyncing) {
+			setRefreshAnimation(true);
+		}
 	}
 	
 
@@ -225,22 +229,30 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 		return super.onOptionsItemSelected(item);
 	}
 	
+	private void setRefreshAnimation(boolean on) {
+		if (on) {
+    		mState.mSyncing = true;
+    		mRefreshView.setFocusable(false);
+    		mRefreshView.setClickable(false);
+    		mRefreshView.startAnimation(mAniSpinSelf);
+		} else {
+    		mState.mSyncing = false;
+    		mState.mGotError = false;
+    		mRefreshView.setFocusable(true);
+    		mRefreshView.setClickable(true);
+    		mRefreshView.clearAnimation();
+		}
+	}
+	
 	@Override
 	public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
         	case SyncService.STATUS_RUNNING: {
-        		mState.mSyncing = true;
-        		mRefreshView.setFocusable(false);
-        		mRefreshView.setClickable(false);
-        		mRefreshView.startAnimation(mAniSpinSelf);
+        		setRefreshAnimation(true);
         		break;
         	}
         	case SyncService.STATUS_FINISHED: {
-        		mState.mSyncing = false;
-        		mState.mGotError = false;
-        		mRefreshView.setFocusable(true);
-        		mRefreshView.setClickable(true);
-        		mRefreshView.clearAnimation();
+        		setRefreshAnimation(false);
         		removeOldTopics();
         		setupTopicListAdapter();
         		break;
