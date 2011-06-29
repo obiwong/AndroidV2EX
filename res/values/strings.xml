@@ -100,4 +100,8 @@
 			created TEXT
 			);</item>
 	</string-array>
+
+	<!-- About AndroidV2EX -->
+	<string name="about_info_title">About AndroidV2EX</string>
+	<string name="about_info_summary">version: 0.1</string>
 </resources>

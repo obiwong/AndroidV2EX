@@ -21,4 +21,7 @@
         android:summary="Number of days to sync summary"
         android:defaultValue="@string/days_to_sync_values_default" />
 
+	<Preference android:summary="@string/about_info_summary"
+		android:title="@string/about_info_title" />
+
 </PreferenceScreen>
