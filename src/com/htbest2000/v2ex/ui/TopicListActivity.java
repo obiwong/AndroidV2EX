@@ -145,7 +145,7 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 										Database.Columns.Topics.NAME_REPLIES,
 										Database.Columns.Topics.NAME_MEMBER_USERNAME,
 										Database.Columns.Topics.NAME_NODE_TITLE,
-										Database.Columns.Topics.NAME_CREATED,},
+										Database.Columns.Topics.NAME_LAST_MODIFIED,},
 						new int[] { R.id.topic_title, R.id.topic_content, R.id.topic_replies,
 									R.id.topic_author, R.id.topic_node, R.id.created});
 
@@ -153,7 +153,7 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 					@Override
 					public boolean setViewValue(View view, Cursor cur, int field) {
 						final int content_field = Database.Columns.Topics.ID_CONTENT;
-						final int created_field = Database.Columns.Topics.ID_CREATED;
+						final int created_field = Database.Columns.Topics.ID_LAST_MODIFIED;
 						
 						if (content_field == field) {
 							final TextView tv = (TextView)view;

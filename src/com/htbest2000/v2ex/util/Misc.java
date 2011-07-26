@@ -44,7 +44,7 @@ public class Misc {
 	
 	public static Cursor getTopicsCursor(Context context) {
 		return Database.getInstance(context).query(
-				Database.TABLE_TOPICS, null, null, null, null, null, null);
+				Database.TABLE_TOPICS, null, null, null, null, null, "last_modified DESC");
 	}
 	
 	public static Cursor getAllNodesCursor(Context context) {
