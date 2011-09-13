@@ -18,38 +18,25 @@ package com.htbest2000.v2ex.ui;
 
 
 import com.htbest2000.v2ex.R;
-import com.htbest2000.v2ex.io.Downloader;
 import com.htbest2000.v2ex.provider.Database;
 import com.htbest2000.v2ex.service.SyncService;
 import com.htbest2000.v2ex.util.DetachableResultReceiver;
 import com.htbest2000.v2ex.util.Misc;
-import com.htbest2000.v2ex.util.StatFile;
 import com.htbest2000.v2ex.util.ToastMaster;
 import com.htbest2000.v2ex.util.State;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.Calendar;
 import java.util.TimeZone;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
-import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -108,11 +95,10 @@ public class TopicListActivity extends RoboActivity implements DetachableResultR
 	protected void onResume() {
 		super.onResume();
 		// setupTopicListAdapter();
-		if (StatFile.getSyncBush(this) && !mState.mSyncing) {
+		if (SyncService.isRunning()) {
 			setRefreshAnimation(true);
 		}
 	}
-	
 
 	/** Handle "refresh" title-bar action. */
 	public void onRefreshClick(View v) {

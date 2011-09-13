@@ -28,7 +28,6 @@ import com.htbest2000.v2ex.api.Topics.Topic;
 import com.htbest2000.v2ex.io.Downloader;
 import com.htbest2000.v2ex.provider.Database;
 import com.htbest2000.v2ex.util.Misc;
-import com.htbest2000.v2ex.util.StatFile;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -59,6 +58,8 @@ public class SyncService extends RoboIntentService {
     public static final int STATUS_RUNNING = 1;
     public static final int STATUS_ERROR = 2;
     public static final int STATUS_FINISHED = 3;
+    
+    private static boolean mRunning = false;
 	
 	Downloader mDownloader;
 
@@ -73,14 +74,6 @@ public class SyncService extends RoboIntentService {
 	}
 
 	@Override
-	public void onDestroy() {
-		if (StatFile.getSyncBush(this)) {
-			StatFile.setSyncBusy(this, false);
-		}
-		super.onDestroy();
-	}
-
-	@Override
 	protected void onHandleIntent(Intent intent) {
 		final String path     = intent.getStringExtra(PATH);
 		final int    operator = intent.getIntExtra(   OPERATOR, -1);
@@ -88,7 +81,7 @@ public class SyncService extends RoboIntentService {
 		final ResultReceiver receiver = intent.getParcelableExtra(EXTRA_STATUS_RECEIVER);
 		if (receiver != null) receiver.send(STATUS_RUNNING, Bundle.EMPTY);
 
-		StatFile.setSyncBusy(this, true);
+		mRunning = true;
 
 		try {
 			switch (operator) {
@@ -108,9 +101,7 @@ public class SyncService extends RoboIntentService {
             }
 		}
 		
-		StatFile.setSyncBusy(this, false);
-		
-		Log.i(TAG, "done sync: " + receiver);
+		mRunning = false;
 		
 		if (receiver != null)
 			receiver.send(STATUS_FINISHED, Bundle.EMPTY);
@@ -119,18 +110,14 @@ public class SyncService extends RoboIntentService {
 	private void fetchTopicList(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_LIST) );
 		if (DEBUG) Log.d(TAG, "start fetchTopicList");
-		StatFile.setSyncBusy(this, true);
 		mDownloader.fetchHtml( path );
-		StatFile.setSyncBusy(this, false);
 		if (DEBUG) Log.d(TAG, "end fetchTopicList");
 	}
 
 	private void fetchNodes(String path) throws IOException {
 		mDownloader.setCommand( commandFactory(COMMAND_FETCH_TOPIC_NODES) );
 		if (DEBUG) Log.d(TAG, "start fetchNodes");
-		StatFile.setSyncBusy(this, true);
 		mDownloader.fetchHtml(path);
-		StatFile.setSyncBusy(this, false);
 		if (DEBUG) Log.d(TAG, "end fetchNodes");
 	}
 
@@ -249,5 +236,9 @@ public class SyncService extends RoboIntentService {
 			public void onPostIn(BufferedInputStream in) {
 			}
 		};
+	}
+	
+	public static boolean isRunning() {
+		return mRunning;
 	}
 }

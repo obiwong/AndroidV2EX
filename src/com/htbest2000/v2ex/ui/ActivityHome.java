@@ -40,4 +40,9 @@ public class ActivityHome extends RoboActivity {
 		Intent i = new Intent(this, AllNodesActivity.class);
 		startActivity(i);
 	}
+	
+	public void onNewFoundtopicsClick(View v) {
+		Intent i = new Intent(this, AllNodesActivity.class);
+		startActivity(i);
+	}
 }

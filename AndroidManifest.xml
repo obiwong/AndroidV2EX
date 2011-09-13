@@ -72,12 +72,6 @@
         </activity>
         
         <service android:name=".service.SyncService" />
-        
-        <receiver android:name=".receiver.NormalReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
 
 	</application>
 </manifest>
